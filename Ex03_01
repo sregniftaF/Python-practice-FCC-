@@ -1,0 +1,9 @@
+# Note to self
+# When comparing the variable using if else, elif statement, can only compare the same data type 
+# any input will be str data type#
+hr = int(input("Enter Hours: "))
+rate = float(input("Enter rate: "))
+if hr>40:
+    rate= rate*1.5
+pay = hr*rate
+print("Pay:",+ pay)
