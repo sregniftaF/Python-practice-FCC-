@@ -1,0 +1,300 @@
+import sys
+import re
+import operator as op
+
+def standardizer():
+    """
+    This function does the necessary clean-up for the US Country Code and numbers,omitting the white spaces and
+    dash in it
+    :return: List of phones numbers after the clean-up
+    """
+
+    # Define a regular expression pattern to match numerical digits
+    digit_pattern = re.compile(r'\d')
+
+    # Split the input string into a list of individual phone numbers
+    phone_numbers = str(sys.argv[1]).split(",")
+
+    # Create an empty array to hold the normalized phone numbers
+    standardized_numbers = []
+
+    # Loop over each phone number in the input list
+    for number in phone_numbers:
+        # Remove all non-digit characters from the phone number using the regular expression pattern
+        digits_only = ''.join(digit_pattern.findall(number))
+
+        if digits_only == '':
+            print("Please ensure that every number contains 10-11 digits.")
+            sys.exit(1)
+
+        # Append the normalized phone number to the array
+        standardized_numbers.append(digits_only)
+
+    # Return the normalized phone numbers as a list
+    return standardized_numbers
+
+
+def standardizer_2nd_Part(numbers):
+
+    """
+    This function does the necessary clean-up for the US Country Code and numbers,omitting the white spaces and
+    dash in it for the extension of the program in Part 2
+    :return: List of phones numbers after the clean-up
+    """
+
+    # Define a regular expression pattern to match numerical digits
+    digit_pattern = re.compile(r'\d')
+
+    # Split the input string into a list of individual phone numbers from the numbers array instead of Argv
+    phone_numbers = str(numbers).split(",")
+
+    # Create an empty array to hold the normalized phone numbers
+    standardized_numbers = []
+
+    # Loop over each phone number in the input list
+    for number in phone_numbers:
+        # Remove all non-digit characters from the phone number using the regular expression pattern
+        digits_only = ''.join(digit_pattern.findall(number))
+
+        if digits_only == '':
+            print("Please ensure that every number contains 10-11 digits.")
+            sys.exit(1)
+
+        # Append the normalized phone number to the array
+        standardized_numbers.append(digits_only)
+
+    # Return the normalized phone numbers as a list
+    return standardized_numbers
+def merge_sort_phone_numbers(numbers):
+    """
+    Sorts a list of US phone numbers (with or without country code) using the Merge Sort Algorithm.
+
+    Args:
+        numbers (list): A list of strings representing US phone numbers.
+
+    Returns:
+        list: The sorted list of phone numbers.
+    """
+
+    def merge(left, right):
+        result = []
+        i = j = 0
+        while i < len(left) and j < len(right):
+            if int(left[i]) <= int(right[j]):
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+        result.extend(left[i:])
+        result.extend(right[j:])
+        return result
+
+    if len(numbers) <= 1:
+        return numbers
+
+    mid = len(numbers) // 2
+    left = numbers[:mid]
+    right = numbers[mid:]
+
+    left = merge_sort_phone_numbers(left)
+    right = merge_sort_phone_numbers(right)
+
+    return merge(left, right)
+
+def find_median(numbers):
+    """
+    This function finds the median in the number for the given input list for the first part of the assignment.
+
+    :param numbers: This is in the input list of numbers
+    :return: Return the median number found in the list.
+    """
+
+    #Check for the len of the number
+    n = len(numbers)
+    if n % 2 == 0:  # check if even
+        print("Median: " + str(numbers[n // 2 - 1]) + ", " + str(numbers[n // 2]))
+        return
+    else:
+        print("Median:", numbers[n // 2])
+        return
+
+def find_nearest_numbers(array, search_object, k):
+    """
+    This function uses binary search to find the number closest to the search object(number) in this case.
+
+    :param array: The input array(list of integers) to use for the search for the nearest numbers
+    :param search_object: The search object which is the number to be searched for.
+    :param k: The instance of unique instance for the number to be searched
+    :return: Returns the value closest to the search
+    """
+
+    # Initialize variables to keep track of the closest numbers
+    closest_numbers = []
+    closest_distances = []
+
+    # Perform binary search to find the index of the search object in the array
+    low, high = 0, len(array) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if array[mid] == search_object:
+            # If the search object is found in the array, return it as the closest number
+            return [search_object]
+
+        elif array[mid] < search_object:
+            # If the middle element is less than the search object, search the right half of the array
+            low = mid + 1
+        else:
+            # If the middle element is greater than the search object, search the left half of the array
+            high = mid - 1
+
+        # Update the closest numbers with the current middle element
+        current_distance = abs(array[mid] - search_object)
+        if len(closest_numbers) < k:
+            closest_numbers.append(array[mid])
+            closest_distances.append(current_distance)
+        elif current_distance < max(closest_distances):
+            index = closest_distances.index(max(closest_distances))
+            closest_numbers[index] = array[mid]
+            closest_distances[index] = current_distance
+
+    # Return the closest numbers found
+    closest_num = closest_numbers[0]
+    return closest_num
+
+def open_file(filename):
+    """
+    This function opens the file and read the text file context.
+    :return: Return the file contents read from the text file
+    """
+    file = open(filename, "r")
+
+    data = file.read()
+    dataInList = data.split("\n")
+
+    file.close()
+    return dataInList
+
+def duplicate_numbers(phone_numbers, search_num):
+
+    """
+    Returns all instances of a chosen number.
+
+    :param phone_numbers:
+    :param search_num:
+    :return search_array:
+    """
+
+    # Initialise all variables here
+    seen = set()  # Set list created to help with the population of dupes array
+    dupes = []  # duplicate numbers to be stored here
+    search_array = []  # All instances of duplicate number stored here
+    count = 0  # for for-loop to insert search_array elements
+
+    # Append all instances of duplicated numbers into dupes array
+    for x in phone_numbers:
+        if x in seen:
+            if x not in dupes:
+                dupes.append(x)
+                dupes.append(x)
+
+            else:
+                dupes.append(x)
+        else:
+            seen.add(x)
+
+    print(dupes)
+
+    # Append all instances of chosen duplicate number into search_array
+    for x in dupes:
+        if int(search_num) == x:
+            search_array.append(search_num)
+            count += 1
+            print(search_num)
+
+    if count == 0:
+        print("Number has no duplicate")  # If duplicate of this number does not exist.
+    return search_array
+
+def validator(numbers):
+
+    """
+    Validates a list of US phone numbers, rejecting those with invalid area codes or length.
+
+    Args:
+        numbers (list): A list of strings representing US phone numbers.
+
+    Returns:
+        list: The list of validated phone numbers or list of invalidated phone numbers.
+    """
+
+    # Define a regular expression pattern to match US phone numbers
+    phone_pattern = re.compile(r'^1?\d{10}$|^1?\d{11}$')
+
+    # Create an empty array to hold the invalid phone numbers
+    invalid_numbers = []
+
+    count = 0
+
+    # Loop over each phone number in the input list
+    for number in numbers:
+        # Check if the number has a valid format
+        if phone_pattern.match(number):
+            # Check if the area code starts with 0, or if phone number is adequate
+            if (len(number) == 11 and number[1:4].startswith('0')) or (
+                    len(number) == 10 and number[:3].startswith('0')) or (
+                        len(number) == 11 and not number.startswith('1')):
+                invalid_numbers.append(number)
+
+        else:
+            invalid_numbers.append(number)
+
+        if len(number) == 11:
+            number = number[1:]
+            numbers[count] = number
+
+        count += 1
+
+    if invalid_numbers:
+        print(f"\nThe following phone numbers are invalid: {invalid_numbers}")
+        print("\nPlease ensure your area codes do not begin with 0,"
+              "\nyour country codes begin with 1,"
+              "\nand that your numbers contain 10-11 digits each")
+        sys.exit(1)
+
+#Main Program Call
+if __name__ == '__main__':
+    #For second part extension, checks for the len(sys.argv >=4)
+    if len(sys.argv) >= 4:
+        #Set the target number to be read in this case which is argv[2]
+        target_number = int(sys.argv[2])
+
+        #Set the variable K to be sys.argv[3]
+        k = int(sys.argv[3])
+
+        #Call the open file function and store the data read from the file into the numbers array
+        numbers_array = open_file(sys.argv[1])
+
+        standardized_numbers2 = standardizer_2nd_Part(numbers_array)
+        validator(standardized_numbers2)
+        sorted_numbers = merge_sort_phone_numbers(standardized_numbers2)
+
+        #Change the List of Strings to list of integers after the sorting phase
+        int_list = list(map(int, sorted_numbers))
+
+        #Find the nearest numbers X closest to the search object
+        x= find_nearest_numbers(int_list, target_number, k)
+        #Call the duplicated numbers function to see if there any duplicates present for the desired search number
+        duplicate_numbers(int_list,x)
+
+    #For First Part of the Assignment
+    else:
+        standardized_numbers = standardizer()
+        # Validate the phone numbers using the validator() function
+        validator(standardized_numbers)
+         # Sort the normalized phone numbers using the sort_phone_numbers function
+        sorted_numbers = merge_sort_phone_numbers(standardized_numbers)
+        median = find_median(sorted_numbers)
+        # Print the sorted phone numbers to the console
+        print("Sorted phone numbers:")
+        print(sorted_numbers)
